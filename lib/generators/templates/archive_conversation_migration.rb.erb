@@ -1,0 +1,41 @@
+# frozen_string_literal: true
+
+class CreateVigilesArchiveConversationsTable < ActiveRecord::Migration<%= migration_version %>
+
+  def change
+    create_table :vigiles_archive_conversations do |t|
+      t.text     :request_content_type, null: false
+      t.text     :request_user_agent,   null: false
+      t.datetime :request_timestamp,    null: false
+      t.inet     :request_remote_ip,    null: false
+      t.text     :request_protocol,     null: false
+      t.jsonb    :request_headers,      null: false, default: {}
+
+      # if the request doesn't origin from an identifiable origin,
+      # like a website, this value is typically nil. in which case
+      # we can substitute with `request_user_agent`.
+      t.text     :request_origin
+      t.jsonb    :request_payload,      null: false, default: {}
+      t.text     :request_method,       null: false
+      t.text     :request_path,         null: false
+      t.text     :request_url,          null: false
+      t.text     :request_id,           null: false
+
+      t.text     :response_content_type, null: false
+      t.jsonb    :response_headers,      null: false
+      t.jsonb    :response_payload,      null: false
+      t.integer  :response_status,       null: false
+
+      # conversation `metadata` holds all other information that might be
+      # useful when inspecting the conversation. for example, metadata
+      # could hold user information (id, rate limiting usage, etc), or
+      # the (rack) environment within which rails handled the request.
+      t.jsonb :metadata, null: false, default: {}
+
+      # `extras` are added here as convenience. it's a grab bag of all
+      # data that wouldn't cleanly fit in any of the above columns. it's
+      # also a mixed bag of request and response data.
+      t.jsonb :extras, null: false, default: {}
+    end
+  end
+end

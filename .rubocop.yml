@@ -1,0 +1,35 @@
+require:
+  - rubocop-rake
+  - rubocop-minitest
+  - rubocop-sorbet
+
+AllCops:
+  TargetRubyVersion: 3.0
+  Exclude:
+    - "**/generators/**/*"
+    - "**/sorbet/**/*"
+    - "**/bin/**/*"
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/AccessModifierDeclarations:
+  Enabled: true
+  EnforcedStyle: inline
+
+Style/Documentation:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
