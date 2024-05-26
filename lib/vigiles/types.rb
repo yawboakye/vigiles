@@ -24,10 +24,12 @@ module Vigiles
       end
     end
 
-    Headers     = T.type_alias { T::Hash[String, T.untyped] }
-    JsonPayload = T.type_alias { T::Hash[T.untyped, T.untyped] }
     HtmlPayload = String
+
+    UntypedHash = T.type_alias { T::Hash[T.untyped, T.untyped] }
+    JsonPayload = T.type_alias { UntypedHash }
     Payload     = T.type_alias { T.any(JsonPayload, HtmlPayload) }
+    Headers     = T.type_alias { T::Hash[String, T.untyped] }
 
     ContentTypeRecorder = T.type_alias do
       T::Hash[String, T.proc.params(arg0: ActionDispatch::Response).returns(Vigiles::Archive::Conversation)]

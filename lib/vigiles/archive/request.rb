@@ -59,7 +59,7 @@ module Vigiles
           protocol: request.protocol,
           headers: unfucked_headers,
           origin: request.origin || "unknown_origin_url",
-          payload: request.body.read,
+          payload: Utilities::JSON.parse_benignly(request.body.read),
           http_method: Types::HttpMethod.deserialize(request.method),
           path: request.path,
           url: Utilities::URI.parse_into_http_or_https(request.url),

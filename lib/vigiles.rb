@@ -7,7 +7,7 @@ require_relative "core_ext"
 require "action_dispatch"
 
 loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
-loader.inflector.inflect("uri" => "URI")
+loader.inflector.inflect("uri" => "URI", "json" => "JSON")
 loader.ignore("#{__dir__}/generators")
 loader.ignore("#{__dir__}/core_ext.rb")
 loader.ignore("#{__dir__}/core_ext")
