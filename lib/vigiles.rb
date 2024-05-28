@@ -3,8 +3,8 @@
 
 require "zeitwerk"
 require "sorbet-runtime"
-require_relative "core_ext"
 require "action_dispatch"
+require_relative "core_ext"
 
 loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
 loader.inflector.inflect("uri" => "URI", "json" => "JSON")

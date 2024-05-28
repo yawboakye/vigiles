@@ -1,8 +1,6 @@
 # typed: strict
 # frozen_string_literal: true
 
-require "logger"
-
 module Vigiles
   module Middleware
     class RecordConversation
