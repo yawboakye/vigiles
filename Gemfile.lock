@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vigiles (0.1.0.pre.beta10)
+    vigiles (0.1.1)
       rails (~> 7.0)
       sorbet-runtime (~> 0.5)
       zeitwerk (~> 2.6)
