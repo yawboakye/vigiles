@@ -20,6 +20,9 @@ module Vigiles
 
     abstract!
 
+    sig { abstract.params(req: ActionDispatch::Request).void }
+    def ensure_content_type_matches!(req); end
+
     sig { abstract.params(req: ActionDispatch::Request, res: Rack::Response).returns(Archive::Conversation) }
     def record(req:, res:); end
   end

@@ -14,14 +14,19 @@ module Vigiles
       Request              = Vigiles::Archive::Request
       Extras               = Vigiles::Archive::Extras
 
+      sig { override.params(req: ActionDispatch::Request).void }
+      private def ensure_content_type_matches!(req)
+        return if req.content_type == ContentType::ApplicationJson.serialize
+
+        raise ConversationRecorder::MisconfiguredRecorderError.new(
+          expected: ContentType::ApplicationJson.serialize,
+          actual: req.content_type
+        )
+      end
+
       sig { override.params(req: ActionDispatch::Request, res: Rack::Response).returns(Archive::Conversation) }
       def record(req:, res:)
-        unless req.content_type == ContentType::ApplicationJson.serialize
-          raise ConversationRecorder::MisconfiguredRecorderError.new(
-            expected: ContentType::ApplicationJson.serialize,
-            actual: req.content_type
-          )
-        end
+        ensure_content_type_matches!(req)
 
         response = Response.from(res)
         request  = Request.from(req)
