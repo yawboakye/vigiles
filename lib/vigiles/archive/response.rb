@@ -1,4 +1,4 @@
-# typed: false
+# typed: strict
 # frozen_string_literal: true
 
 module Vigiles
@@ -10,6 +10,33 @@ module Vigiles
       const :payload,      Types::Payload
       const :status,       Integer
 
+      class ResponseBodyTooDeepError < StandardError
+        sig { returns(Integer) }
+        attr_reader :max_stack_depth
+
+        sig { returns(Integer) }
+        attr_reader :stack_depth
+
+        sig { params(stack_depth: Integer, max_stack_depth: Integer).void }
+        def initialize(stack_depth, max_stack_depth)
+          @max_stack_depth = max_stack_depth
+          @stack_depth     = stack_depth
+
+          super
+        end
+      end
+
+      sig { params(body: Rack::BodyProxy, stack_depth: Integer).returns(String) }
+      private_class_method def self.extract_body_from_rack_body_proxy(body, stack_depth = 1)
+        raise ResponseBodyTooDeepError.new(stack_depth, 5) unless stack_depth < 5
+
+        case (inner_body = body.instance_variable_get(:@body))
+        when Rack::BodyProxy then extract_body_from_rack_body_proxy(inner_body, stack_depth + 1)
+        when Array           then inner_body[0] || "null"
+        else raise
+        end
+      end
+
       sig { params(rack_response: Rack::Response).returns(Types::Payload) }
       private_class_method def self.extract_payload(rack_response)
         case (body = rack_response.body)
@@ -18,12 +45,11 @@ module Vigiles
 
           { __false_body: :not_empty_handle_later }
         when Rack::BodyProxy
-          body_proxy = body
-          body_proxy = body_proxy.instance_variable_get(:@body) until body_proxy.is_a?(Array)
+          extracted_body = extract_body_from_rack_body_proxy(body)
           begin
-            JSON.parse(body_proxy[0])
+            JSON.parse(extracted_body)
           rescue StandardError
-            { __false_body: body_proxy[0] }
+            { __false_body: extracted_body }
           end
         else
           { __false_body: :unknown_response_payload_type }
