@@ -8,7 +8,7 @@ module Vigiles
         %w[
           application/json
         ]
-      ), T::Set[String]
+      ).freeze, T::Set[String]
     )
 
     DEFAULT_CONTENT_TYPE_RECORDERS = T.let(
