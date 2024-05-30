@@ -4,7 +4,7 @@ require:
   - rubocop-sorbet
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.3
   Exclude:
     - "**/generators/**/*"
     - "**/sorbet/**/*"
