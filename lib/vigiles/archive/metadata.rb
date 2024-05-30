@@ -8,7 +8,7 @@ module Vigiles
 
       sig { params(request_env: T::Hash[T.untyped, T.untyped]).returns(Metadata) }
       def self.from(request_env)
-        Metadata.new(request_env: request_env)
+        Metadata.new(request_env:)
       end
     end
   end

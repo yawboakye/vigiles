@@ -13,7 +13,7 @@ module Vigiles
         to: :options
 
       sig { params(app: T.untyped, options: Vigiles::Options).void }
-      def initialize(app, options=Vigiles::Options.make_default_options)
+      def initialize(app, options = Vigiles::Options.make_default_options)
         @app     = app
         @options = options
       end
@@ -36,7 +36,7 @@ module Vigiles
             "[vigiles] conversation recorder: " \
             "conversation=#{convo.nil? ? "not_recorded" : convo.id} " \
             "request=#{req.request_id}"
-        rescue => e
+        rescue StandardError => e
           capture_exception.call(e)
           logger.warn \
             "[vigiles] conversation recorder error: " \

@@ -15,7 +15,7 @@ module Vigiles
         super
       end
     end
-    
+
     sig { params(req: ActionDispatch::Request, res: Rack::Response).returns(T.nilable(Conversation)) }
     def self.record_conversation(req:, res:)
       content_type = req.content_type
