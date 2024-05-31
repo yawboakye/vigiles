@@ -8,7 +8,7 @@ module Vigiles
     module JSON
       extend T::Sig
 
-      sig { params(text: String).returns(T.any(String, Vigiles::Types::UntypedHash)) }
+      sig { params(text: String).returns(T.untyped) }
       def self.parse_benignly(text)
         ::JSON.parse(text)
       rescue StandardError
