@@ -22,7 +22,7 @@ module Vigiles
           @max_stack_depth = max_stack_depth
           @stack_depth     = stack_depth
 
-          super
+          super()
         end
       end
 

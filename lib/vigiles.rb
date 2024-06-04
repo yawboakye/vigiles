@@ -7,7 +7,11 @@ require "action_dispatch"
 require_relative "core_ext"
 
 loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
-loader.inflector.inflect("uri" => "URI", "json" => "JSON")
+loader.inflector.inflect(
+  "json" => "JSON",
+  "http" => "HTTP",
+  "uri" => "URI"
+)
 loader.ignore("#{__dir__}/generators")
 loader.ignore("#{__dir__}/core_ext.rb")
 loader.ignore("#{__dir__}/core_ext")
@@ -49,7 +53,12 @@ module Vigiles
 
   sig { params(request: ActionDispatch::Request).returns(T::Boolean) }
   private_class_method def self.content_type_match?(request)
-    !request.nil?
+    spec.request_content_types.include?(
+      Utilities::HTTP.sanitize_header_value(
+        header: "content-type",
+        value: request.content_type
+      )
+    )
   end
 
   sig { params(req: ActionDispatch::Request).returns(T::Boolean) }

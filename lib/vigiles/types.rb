@@ -24,6 +24,12 @@ module Vigiles
       end
     end
 
+    class WellKnownHttpHeader < T::Enum
+      enums do
+        ContentType = new("content-type")
+      end
+    end
+
     HtmlPayload = String
 
     UntypedHash = T.type_alias { T::Hash[T.untyped, T.untyped] }
