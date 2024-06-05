@@ -3,6 +3,7 @@
 
 require "rails/generators"
 require "rails/generators/active_record"
+require "active_record"
 
 module Vigiles
   module Generators

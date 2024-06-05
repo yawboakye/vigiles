@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require "logger"
+require "rails"
 
 module Vigiles
   class Options < T::Struct

@@ -1,9 +1,10 @@
 # typed: strict
 # frozen_string_literal: true
 
-require "zeitwerk"
 require "sorbet-runtime"
 require "action_dispatch"
+require "zeitwerk"
+
 require_relative "core_ext"
 
 loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
