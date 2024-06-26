@@ -54,10 +54,12 @@ module Vigiles
 
   sig { params(request: ActionDispatch::Request).returns(T::Boolean) }
   private_class_method def self.content_type_match?(request)
+    return false if (content_type = request.content_type).nil?
+
     spec.request_content_types.include?(
       Utilities::HTTP.sanitize_header_value(
         header: "content-type",
-        value: request.content_type
+        value: content_type
       )
     )
   end
