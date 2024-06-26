@@ -34,7 +34,13 @@ module Vigiles
     @spec = spec
   end
 
-  sig { params(req: ActionDispatch::Request, res: Rack::Response).returns(T.nilable(Archive::Conversation)) }
+  sig do
+    params(
+      req: ActionDispatch::Request,
+      res: Rack::Response
+    )
+      .returns(T.nilable(Archive::Conversation))
+  end
   def self.maybe_record_conversation(req:, res:)
     return unless should_record?(req)
 
@@ -47,7 +53,7 @@ module Vigiles
   def self.configure(&blk)
     blk.call(spec)
 
-    # TODO(yaw, 2024-06-15): ensure that the spec is valid.
+    # TODO(yaw, 2024-07-15): ensure that the spec is valid.
     # ensure that for every content type a recorder is configured. otherwise
     # assign the general recorder for unknown content types.
   end

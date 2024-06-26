@@ -13,6 +13,7 @@ module Vigiles
         ::JSON.parse(text)
       rescue StandardError
         return text unless block_given?
+
         yield text
       end
     end

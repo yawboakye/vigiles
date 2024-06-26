@@ -10,6 +10,17 @@ module Vigiles
       const :payload,      Types::Payload
       const :status,       Integer
 
+      class InextricableResponseBodyError < StandardError
+        sig { returns(String) }
+        attr_reader :response_body_class
+
+        sig { params(response_body_class: String).void }
+        def initialize(response_body_class:)
+          @response_body_class = response_body_class
+          super("failed to extract response body: response_body_class=#{response_body_class}")
+        end
+      end
+
       class ResponseBodyTooDeepError < StandardError
         sig { returns(Integer) }
         attr_reader :max_stack_depth
@@ -33,7 +44,7 @@ module Vigiles
         case (inner_body = body.instance_variable_get(:@body))
         when Rack::BodyProxy then extract_body_from_rack_body_proxy(inner_body, stack_depth + 1)
         when Array           then inner_body[0] || "null"
-        else raise
+        else                 raise InextricableResponseBodyError.new(inner_body.class.name)
         end
       end
 
