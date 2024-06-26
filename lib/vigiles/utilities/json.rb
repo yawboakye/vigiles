@@ -12,7 +12,8 @@ module Vigiles
       def self.parse_benignly(text)
         ::JSON.parse(text)
       rescue StandardError
-        text
+        return text unless block_given?
+        yield text
       end
     end
   end
