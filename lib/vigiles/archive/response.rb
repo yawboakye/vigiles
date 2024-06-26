@@ -48,7 +48,7 @@ module Vigiles
         end
       end
 
-      sig { params(rack_response: Rack::Response).returns(Types::Payload) }
+      sig { params(rack_response: Rack::Response).returns(T.nilable(Types::Payload)) }
       private_class_method def self.extract_payload(rack_response)
         case (body = rack_response.body)
         when Array
@@ -63,7 +63,7 @@ module Vigiles
             { __false_body: extracted_body }
           end
         else
-          { __false_body: :unknown_response_payload_type }
+          { __false_body: :unknown_response_payload_type, body_class: body.class.name }
         end
       end
 
@@ -73,7 +73,7 @@ module Vigiles
           rack_response: res,
           content_type: res.headers["Content-Type"] || "unknown_content_type",
           headers: res.headers.as_json,
-          payload: extract_payload(res),
+          payload: extract_payload(res) || {__false_body: :body_may_be_nil},
           status: res.status
         )
       end
