@@ -42,7 +42,7 @@ module Vigiles
         raise ResponseBodyTooDeepError.new(stack_depth, 5) unless stack_depth < 5
 
         case (inner_body = body.instance_variable_get(:@body))
-        when ActionDispatch::Response::RackBody then inner_body.body
+        when ActionDispatch::Response::RackBody then inner_body.as_json
         when Rack::BodyProxy                    then rack_body_proxy_extract(inner_body, stack_depth + 1)
         when Array                              then inner_body[0] || "null"
         else                                    raise InextricableResponseBodyError, inner_body.class.name
@@ -52,6 +52,7 @@ module Vigiles
       sig { params(rack_response: Rack::Response).returns(T.nilable(Types::Payload)) }
       private_class_method def self.extract_payload(rack_response)
         case (body = rack_response.body)
+        when ActionDispatch::Response::RackBody
         when Array
           return { body: :empty_no_content } if body.empty?
 
