@@ -38,13 +38,14 @@ module Vigiles
       end
 
       sig { params(body: Rack::BodyProxy, stack_depth: Integer).returns(String) }
-      private_class_method def self.extract_body_from_rack_body_proxy(body, stack_depth = 1)
+      private_class_method def self.rack_body_proxy_extract(body, stack_depth = 1)
         raise ResponseBodyTooDeepError.new(stack_depth, 5) unless stack_depth < 5
 
         case (inner_body = body.instance_variable_get(:@body))
-        when Rack::BodyProxy then extract_body_from_rack_body_proxy(inner_body, stack_depth + 1)
-        when Array           then inner_body[0] || "null"
-        else                 raise InextricableResponseBodyError, inner_body.class.name
+        when ActionDispatch::Response::RackBody then inner_body.body
+        when Rack::BodyProxy                    then rack_body_proxy_extract(inner_body, stack_depth + 1)
+        when Array                              then inner_body[0] || "null"
+        else                                    raise InextricableResponseBodyError, inner_body.class.name
         end
       end
 
@@ -56,7 +57,7 @@ module Vigiles
 
           { __false_body: :not_empty_handle_later }
         when Rack::BodyProxy
-          extracted_body = extract_body_from_rack_body_proxy(body)
+          extracted_body = rack_body_proxy_extract(body)
           begin
             JSON.parse(extracted_body)
           rescue StandardError
