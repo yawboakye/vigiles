@@ -7,7 +7,7 @@ require "rails"
 module Vigiles
   class Options < T::Struct
     const :capture_exception, T.proc.params(a0: StandardError).void
-    const :logger,            ::Logger
+    const :logger,            T.any(::Logger, ActiveSupport::BroadcastLogger)
 
     sig { returns(Options) }
     def self.make_default_options

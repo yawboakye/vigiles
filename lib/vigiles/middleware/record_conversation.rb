@@ -41,7 +41,8 @@ module Vigiles
           logger.warn \
             "[vigiles] conversation recorder error: " \
             "error_message=#{e.message} " \
-            "error_class=#{e.class}"
+            "error_class=#{e.class} " \
+            "backtrace=#{e.backtrace}"
         ensure
           # no matter what happens we shouldn't prevent the rack
           # response from being returned. at this point, the only
