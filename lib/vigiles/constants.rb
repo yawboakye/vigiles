@@ -12,6 +12,15 @@ module Vigiles
       T::Set[String]
     )
 
+    DEFAULT_PATH_EXTENSIONS = T.let(
+      Set.new(
+        %w[
+          .json
+        ]
+      ).freeze,
+      T::Set[String]
+    )
+
     ALL_IANA_CONTENT_TYPES = T.let(
       {
         Types::ContentType::ApplicationJson => Set.new(

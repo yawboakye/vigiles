@@ -58,9 +58,14 @@ module Vigiles
     # assign the general recorder for unknown content types.
   end
 
-  sig { params(request: ActionDispatch::Request).returns(T::Boolean) }
-  private_class_method def self.content_type_match?(request)
-    return false if (content_type = request.content_type).nil?
+  sig { params(req: ActionDispatch::Request).returns(T::Boolean) }
+  private_class_method def self.path_extension_match?(req)
+    spec.request_path_extensions.include?(req.path)
+  end
+
+  sig { params(req: ActionDispatch::Request).returns(T::Boolean) }
+  private_class_method def self.content_type_match?(req)
+    return false if (content_type = req.content_type).nil?
 
     spec.request_content_types.include?(
       Utilities::HTTP.sanitize_header_value(
@@ -72,6 +77,7 @@ module Vigiles
 
   sig { params(req: ActionDispatch::Request).returns(T::Boolean) }
   private_class_method def self.should_record?(req)
-    content_type_match?(req)
+    content_type_match?(req) ||
+      path_extension_match?(req)
   end
 end
